@@ -44,8 +44,10 @@ def check_for_user():
 @app.route('/')
 def main():
     user = check_for_user()
+    posts = session.query(Post).all()
     return render_template('main.html',
-                           user=user)
+                           user=user,
+                           posts=posts)
 
 
 @app.route('/newpost', methods=['GET','POST'])
@@ -56,7 +58,7 @@ def newPost():
             return redirect(url_for('login'))
         return render_template('newpost.html',
                                user=user,
-                               e=None)
+                               p=None)
     else:
         print 'POST'
         title = request.form['title']
@@ -76,6 +78,43 @@ def newPost():
                                    user=user,
                                    e=None,
                                    error_message=error)
+
+
+@app.route('/post/<int:post_id>/0')
+def postView(post_id):
+    user = check_for_user()
+    post = session.query(Post).filter(Post.id == post_id).first()
+    return render_template('post.html',
+                           user=user,
+                           p=post)
+
+
+@app.route('/edit/<int:post_id>', methods=['POST', 'GET'])
+def editPost(post_id):
+    post = session.query(Post).filter(Post.id == post_id).first()
+    if request.method == 'GET':
+        user = check_for_user()
+        if not user:
+            return redirect(url_for('postView', post_id=post_id))
+        return render_template('newpost.html',
+                               user=user,
+                               p=post)
+    else:
+        title = request.form['title']
+        des = request.form['post']
+        if title and des:
+            post.title = title
+            post.desc = des
+            session.commit()
+            return redirect(url_for('postView', post_id=post_id))
+
+
+@app.route('/delete/<int:post_id>', methods=['POST'])
+def deletePost(post_id):
+    post = session.query(Post).filter(Post.id == post_id).first()
+    session.delete(post)
+    session.commit()
+    return redirect(url_for('main'))
 
 
 

@@ -4,12 +4,9 @@
 	
 	{% import 'post_block.html' as temp %}
 
-	{{ temp.summarypost(e,user) }}
+	{{ temp.summarypost(p,user) }}
 	
-	{{ temp.post(e,user) }}
-
-	
-	{{temp.comment(e,comments,user,comment_id)}}
+	{{ temp.post(p,user) }}
 	
 
 {% endblock %}

@@ -1,29 +1,14 @@
 {# All macros used in the site #}
 
 {# Used to display the actual post content of a blog post as well as all relevent buttons #}
-{% macro post(e,user) -%}
+{% macro post(p,user) -%}
 
-<pre class="all code">{{e.code}}</pre>
-
-
-{% if user and e.posted_by == user.username %}
-	<form action="/edit/{{e.key().id()}}" class="half">
+{% if user and p.user.username == user.username %}
+	<form action="/edit/{{p.id}}" class="half">
 		<input type="submit" value="edit" class="edit-button">
 	</form>
-	<form method="post" action="/delete/post/{{e.key().id()}}" class="text-right half">
+	<form method="post" action="/delete/{{p.id}}" class="text-right half">
 		<input type="submit" value="delete" class="delete-button">
-	</form>
-	
-{% elif user and user.username in e.likes %}
-	
-	<form action="/like/post/{{e.key().id()}}" method="post">
-		<input type="submit" name="like" value="unlike" class="like-button">
-	</form>
-		
-{% elif user and user.username not in e.likes %}
-	
-	<form action="/like/post/{{e.key().id()}}" method="post">
-		<input type="submit" name="like" value="like" class="like-button">
 	</form>
 	
 {% endif %}
@@ -99,31 +84,33 @@
 
 
 {# Used to display just the title and summary of a post #}
-{%- macro summarypost(e,user) %}
+{%- macro summarypost(p,user) %}
 
-<section class="half title"><a href="/{{e.key().id()}}/0">{{e.title}}</a></section> 
-<section class="half text-right">
-	Posted by <a href="/postsby/{{e.posted_by}}">{{e.posted_by}}</a><br>
-	{{e.created.strftime('%b %d, %Y')}}<br>
+<section class="half title"><a href="/post/{{p.id}}/0">{{p.title}}</a></section> 
+<section class="half title text-right">
+	{{p.user.username}}
 </section> 
 <section class="summary three-quarter">
-	{{e.summary}}
+	{{p.desc}}
 </section>
 <section class="quarter text-right">
-	{{ e.likes|length }} &#10084;
+	{{p.user.username}}
 </section>
 <hr class="all bottom-bar">
 
 {%- endmacro %}
 
+
+
+
 {# Used to display the form used fro creating a new post or editing a post #}
-{% macro editpost(e='',error_message='',user) -%}
+{% macro editpost(p='',error_message='',user) -%}
 
 <form method="post" class="all">
 	<h3>Title</h3>
-	<input id="title" type="text" name="title" value="{{e.title}}" size="45"><br>
+	<input id="title" type="text" name="title" value="{{p.title}}" size="45"><br>
 	<h3>Post</h3>
-	<textarea name="post" rows="20" cols="95">{{e.code}}</textarea>
+	<textarea name="post" rows="20" cols="95">{{p.desc}}</textarea>
 	<input type="hidden" name="user_id" value="{{user.id}}">
 	<br>
 	<div>
@@ -131,13 +118,13 @@
 	</div>
 	<input type="submit" value="save" class="submit-button">
 </form>
-{% if e == None %}
+{% if p == None %}
 <form action="/welcome">
 	<input type="submit" value="cancel" class="submit-button">
 </form>
 
 {% else %}
-<form action="/{{e.key().id()}}/0">
+<form action="/edit/{{p.id}}">
 	<input type="submit" value="cancel" class="submit-button">
 </form>
 
