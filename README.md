@@ -1,4 +1,4 @@
-# Hack-a-thon
+# Bug Hunt
 
 ### Disclaimer
 
