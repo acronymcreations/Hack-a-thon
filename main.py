@@ -7,9 +7,6 @@ from werkzeug.utils import secure_filename
 import random
 import string
 from db_setup import Base, User, Post
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
-import httplib2
 import json
 import os
 from flask import make_response
