@@ -8,6 +8,7 @@ import random
 import string
 from db_setup import Base, User, Post
 import json
+import hashlib
 import os
 from flask import make_response
 import requests
@@ -21,9 +22,16 @@ DBsession = sessionmaker(bind=engine)
 session = DBsession()
 
 
+def hash_cookie(user):
+    hash_text = hashlib.md5(user.username).hexdigest()
+    cookie_text = '%s|%s' % (user.username, hash_text)
+    print cookie_text
+    return cookie_text
+
+
 def setCookie(user):
+    cookie_value = hash_cookie(user)
     response = app.make_response(redirect(url_for('main')))
-    cookie_value = '%s|%s' % (user.id, user.username)
     response.set_cookie('user_id', value=cookie_value)
     return response
 
@@ -33,9 +41,10 @@ def check_for_user():
     print cookie_value
     if cookie_value:
         params = cookie_value.split('|')
-        user = session.query(User).filter(User.username == params[1]).filter(User.id == params[0]).first()
-        print user
-        return user
+        if hashlib.md5(params[0]).hexdigest() == params[1]:
+            user = session.query(User).filter(User.username == params[0]).first()
+            print user.username
+            return user
 
 
 @app.route('/')
@@ -61,7 +70,7 @@ def newPost():
         title = request.form['title']
         post = request.form['post']
         user_id = request.form['user_id']
-        print title,post,user_id
+        print title, post, user_id
         if title and post and user_id:
             post = Post(title=title,
                         desc=post,
