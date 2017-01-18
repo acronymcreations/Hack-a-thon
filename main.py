@@ -50,7 +50,7 @@ def main():
                            posts=posts)
 
 
-@app.route('/newpost', methods=['GET','POST'])
+@app.route('/newpost', methods=['GET', 'POST'])
 def newPost():
     if request.method == 'GET':
         user = check_for_user()
@@ -117,7 +117,6 @@ def deletePost(post_id):
     return redirect(url_for('main'))
 
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -166,7 +165,10 @@ def signup():
                         password=password)
             session.add(user)
             session.commit()
-            return redirect(url_for('main'))
+            return redirect(url_for('login'))
+        else:
+            message = 'There was a problem with your form.  Please try again.'
+            return render_template('signup.html', error_email=message)
 
 
 @app.route('/all')
