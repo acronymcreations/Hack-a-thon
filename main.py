@@ -43,8 +43,9 @@ def check_for_user():
         params = cookie_value.split('|')
         if hashlib.md5(params[0]).hexdigest() == params[1]:
             user = session.query(User).filter(User.username == params[0]).first()
-            print 'logged in as ' + user.username
-            return user
+            if user:
+                print 'logged in as ' + user.username
+                return user
 
 
 @app.route('/')
@@ -159,12 +160,13 @@ def signup():
         return render_template('signup.html')
     else:
         name = request.form['name']
-        username = request.form['username']
+        username = request.form['username'].strip()
         password = request.form['password']
         verify = request.form['verify']
         email = request.form['email']
+        userQuery = session.query(User).filter(User.username == username).first()
 
-        if username and email and password and password == verify:
+        if username and email and password and password == verify and not userQuery:
             user = User(name=name,
                         email=email,
                         username=username,

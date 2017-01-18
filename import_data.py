@@ -15,10 +15,10 @@ us = session.query(User).delete()
 print 'deleted %s rows from User' % us
 session.commit()
 
-user = User(name='Marissa Mayer',email='yahoo@yahoo.com',username='MMayer',password='yahoosucks')
-session.add(user)
+newuser = User(name='Marissa Mayer',email='yahoo@yahoo.com',username='MMayer',password='yahoosucks')
+session.add(newuser)
 session.commit()
 
-post = Post(title='Edit this Post!',post='Add your name to this post or delete it all together.')
-session.add(post)
+newpost = Post(title='Edit this Post!',desc='Add your name to this post or delete it all together.',user_id=1)
+session.add(newpost)
 session.commit()
