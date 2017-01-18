@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<h2 class="all">Users</h2>
+	<ul>
+		{% for p in users %}
+		<li>{{p.id}}:{{p.name}}</li>
+			<ul>
+				<li>{{p.username}}</li>
+				<li>{{p.email}}</li>
+				<li>{{p.password}}</li>
+			</ul>
+		{% endfor %}
+	</ul>
+
+	<h2 class="all">Posts</h2>
+	<ul>
+		{% for p in posts %}
+		<li>{{p.id}}:{{p.title}}</li>
+			<ul>
+				<li>{{p.desc}}</li>
+				<li>{{p.user.name}}</li>
+			</ul>
+		{% endfor %}
+	</ul>
+
+{% endblock %}
