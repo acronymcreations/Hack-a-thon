@@ -43,7 +43,7 @@ def check_for_user():
         params = cookie_value.split('|')
         if hashlib.md5(params[0]).hexdigest() == params[1]:
             user = session.query(User).filter(User.username == params[0]).first()
-            print user.username
+            print 'logged in as ' + user.username
             return user
 
 
