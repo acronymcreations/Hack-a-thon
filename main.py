@@ -137,7 +137,7 @@ def login():
         password = request.form['password']
 
         user = session.query(User).filter(User.username == username).first()
-        if user.password == password:
+        if user and user.password == password:
             return setCookie(user)
         else:
             error = 'Invalid username and/or password'
