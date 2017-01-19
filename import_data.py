@@ -15,7 +15,7 @@ us = session.query(User).delete()
 print 'deleted %s rows from User' % us
 session.commit()
 
-newuser = User(name='Marissa Mayer',email='yahoo@yahoo.com',username='MMayer',password='yahoosucks')
+newuser = User(name='Marissa Mayer',email='yahoo@yahoo.com',username='MMayer',password='46ea0d5b246d2841744c26f72a86fc29')
 session.add(newuser)
 session.commit()
 

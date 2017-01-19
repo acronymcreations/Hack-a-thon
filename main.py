@@ -137,7 +137,7 @@ def login():
         password = request.form['password']
 
         user = session.query(User).filter(User.username == username).first()
-        if user and user.password == password:
+        if user and user.password == hashlib.md5(password).hexdigest():
             return setCookie(user)
         else:
             error = 'Invalid username and/or password'
@@ -167,10 +167,11 @@ def signup():
         userQuery = session.query(User).filter(User.username == username).first()
 
         if username and email and password and password == verify and not userQuery:
+            hashed_password = hashlib.md5(password).hexdigest()
             user = User(name=name,
                         email=email,
                         username=username,
-                        password=password)
+                        password=hashed_password)
             session.add(user)
             session.commit()
             return redirect(url_for('login'))
