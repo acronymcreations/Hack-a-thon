@@ -12,6 +12,7 @@ import hashlib
 import os
 from flask import make_response
 import requests
+import datetime
 
 
 app = Flask(__name__)
@@ -20,10 +21,11 @@ engine = create_engine('sqlite:///hack.db')
 Base.metadata.bind = engine
 DBsession = sessionmaker(bind=engine)
 session = DBsession()
+key = 'jcad,b.bsdf,.&%^%&*'+str(datetime.date.today())
 
 
 def hash_cookie(user):
-    hash_text = hashlib.md5(user.username).hexdigest()
+    hash_text = hashlib.md5(user.username+key).hexdigest()
     cookie_text = '%s|%s' % (user.username, hash_text)
     print cookie_text
     return cookie_text
@@ -41,7 +43,7 @@ def check_for_user():
     print cookie_value
     if cookie_value:
         params = cookie_value.split('|')
-        if hashlib.md5(params[0]).hexdigest() == params[1]:
+        if hashlib.md5(params[0]+key).hexdigest() == params[1]:
             user = session.query(User).filter(User.username == params[0]).first()
             if user:
                 print 'logged in as ' + user.username

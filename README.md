@@ -14,3 +14,7 @@ as an educational tool to teach about cyber security. This site should not be us
 2. Users were able to access the database and discovered the passwords were being stored in plain text.  Thus, everyone's passwords were compromised.
 
 	- Fixed by storing hashed passwords instead of plain text passwords.  Passwords are hashed using MD5.
+
+3. User discovered the hashing pattern used to create the secure cookies used for authentication, making forging a cookie trivial.
+
+	- Fixed by making the hashing pattern more complicated, making cookie forgery harder.
